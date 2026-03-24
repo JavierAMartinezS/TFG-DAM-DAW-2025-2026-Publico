@@ -1,0 +1,190 @@
+/*HEADER*/
+.header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    background: transparent;
+    padding: 20px 40px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-img {
+    height: 50px;
+    width: auto;
+    cursor: pointer;
+}
+/*MAIN*/
+main {
+    background: #304142 !important; 
+    padding-top: 200px !important;
+    height: 100% !important;
+}
+/*HERO SECCION*/
+.sectionContenedores {
+    border-color: #C2B66E !important;
+}
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.hero-overlay-dark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: white;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.hero-content p {
+    font-size: 1.4rem;
+    margin-bottom: 25px;
+}
+
+
+/*BOTONES*/
+.hero-content .btn-primary {
+    font-size: 1.2rem;
+    padding: 12px 30px;
+    border-radius: 30px;
+}
+
+
+/*RESPONSIVE HERO SECCION*/
+@media (max-width: 768px) {
+
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-content p {
+        font-size: 1.1rem;
+    }
+
+    .logo-img {
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+}
+
+/*SECCION 2*/
+
+.text-align-center {
+    text-align: center;
+}
+.parrafoP {
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: #C2B770;
+}
+h3 {
+    color: #C29F6E;
+    font-weight: 700;
+}
+.section2-div {
+    align-items: center;
+    background: #304142 !important;
+    justify-items: center;
+}
+.section2-div > div {
+    background: #304142 !important;
+}
+.section2-divMain1 {
+    width: 90% !important;
+}
+.bloqueInterno-divMain1 {
+    height: 600px !important;
+    align-items: center;
+    border-color: #626C6D !important;
+}
+.columnaBloqueInterno-divMain1 {
+    justify-items: center;
+}
+.imgInicio {
+    width: 100%;
+    object-fit: cover !important;
+    border-radius: 15px;
+    height: 500px;
+    border-color: #C2B66E !important;
+}
+
+/*SECCION 2*/
+.section3-div {
+    background: #C2906E !important;
+}
+.parrafoPSeccion3 {
+    color: #6B7A82 !important;
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+.h3Seccion3 {
+    color: #303C42 !important;
+}
+.cardSeccion3 {
+    background: #6D6662;
+    height: 800px;
+}
+.carruselCardsSeccion3Inicio {
+    height: 500px;
+}
+.imgInicioSeccion3Carrusel {
+    width: 100%;
+    object-fit: cover !important;
+    height: 500px;
+}
+
+/*SECCION 3*/
+.mapaContenedorInicioCardSeccion3 {
+    width: 85%;
+    height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    border-radius: 15px;
+    border-color: #C2B66E !important;
+}

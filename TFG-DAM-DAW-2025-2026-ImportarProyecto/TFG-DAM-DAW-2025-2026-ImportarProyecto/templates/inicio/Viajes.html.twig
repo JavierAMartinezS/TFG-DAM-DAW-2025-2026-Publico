@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Viajes | TripPlanner{% endblock %}
+
+{% block body %}
+    {% block content %}
+        <section class="seccionNuevoViaje">
+            <div class="d-flex flex-row w-100 contenedorMisViajesAcordeon">
+                <div class="accordion accordion-flush w-100" id="accordionNuevoViaje">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed px-5" type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseNuevoViaje"
+                                aria-expanded="true"
+                                aria-controls="collapseNuevoViaje">
+                                Crear Nuevo Viaje
+                            </button>
+                        </h2>
+                        <div id="collapseNuevoViaje" class="accordion-collapse show collapse"
+                            data-bs-parent="#accordionNuevoViaje">
+                            <div class="accordion-body px-5">
+                                <h3 class="text-center my-5">Empecemos a crear un nuevo viaje con una ronda de preguntas rápidas</h3>
+                                <div class="chatbot-container">
+                                    <div class="chat-window" id="chatWindow"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="seccionMisViajes w-100">
+            <div class="d-flex flex-row w-100 contenedorMisViajesAcordeon">
+                <div class="accordion accordion-flush w-100" id="accordionMisViajes">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed px-5" type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseMisViajes"
+                                aria-expanded="false"
+                                aria-controls="collapseMisViajes">
+                                Mis Viajes
+                            </button>
+                        </h2>
+                        <div id="collapseMisViajes" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionMisViajes">
+                            <div class="accordion-body px-5">
+                                <div id="mis-viajes"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script src="{{ asset('js/Viajes.js') }}"></script>
+    {% endblock %}
+{% endblock %}

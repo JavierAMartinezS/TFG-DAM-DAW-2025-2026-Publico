@@ -1,0 +1,188 @@
+h4 {
+    color: #C29F6E;
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.ia-layout {
+    display: flex;
+    gap: 20px;
+    height: calc(100vh - 120px);
+}
+
+.ia-chat-panel {
+    width: 35%;
+    background: #f4f6f9;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.ia-trip-summary {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
+
+.ia-trip-summary ul {
+    padding-left: 18px;
+    margin: 0;
+}
+
+.ia-chat-window {
+    flex: 1;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
+
+.ia-message {
+    padding: 10px 14px;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    max-width: 80%;
+    white-space: pre-line;
+}
+
+.ia-bot {
+    background: #e9edf2;
+}
+
+.ia-user {
+    background: #0077B6;
+    color: #ffffff;
+    margin-left: auto;
+}
+
+.ia-chat-input {
+    display: flex;
+    gap: 10px;
+}
+
+.ia-chat-input input {
+    flex: 1;
+}
+
+.ia-map-panel {
+    width: 65%;
+    background: #304142;
+    border-radius: 16px;
+    display: flex;
+    overflow: hidden;
+}
+
+.ia-map-sidebar {
+    width: 400px;
+    background: #3E5456;
+    color: #ffffff;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.ia-map-canvas {
+    flex: 1;
+    background: #dfe7ec;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+.ia-chat-input > button {
+    padding: 12px;
+    background: #0077B6;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.ia-chat-window {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-bubble {
+    align-self: flex-end;
+    background: #0077B6;
+    color: #fff;
+    text-align: left;
+    border-radius: 12px 12px 0 12px;
+    margin-left: auto;
+    max-width: 80%;
+}
+
+.bot-bubble {
+    align-self: flex-start;
+    background: #ffffff;
+    color: #000000;
+    text-align: left;
+    border-radius: 12px 12px 12px 0;
+    margin-right: auto;
+    max-width: 80%;
+}
+
+/*SIDEBAR*/
+
+.viaje-card {
+    width: 100%;
+    min-height: 180px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+}
+
+.viaje-card-overlay {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.viaje-card h6 {
+    color: #ffffff;
+    margin-bottom: 6px;
+    text-align: left;
+}
+
+.viaje-card p {
+    color: #e0e0e0;
+    font-size: 0.85rem;
+    line-height: 1.3;
+    margin-bottom: 10px;
+    text-align: left;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.viaje-card-btn {
+    display: flex;
+    justify-content: center;
+
+}
+.ia-map-sidebar > .card > div > button {
+    width: 90%;
+    display: block;
+    margin: 0 auto;
+    padding: 12px;
+    background: #0077B6;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 15px;
+}
+

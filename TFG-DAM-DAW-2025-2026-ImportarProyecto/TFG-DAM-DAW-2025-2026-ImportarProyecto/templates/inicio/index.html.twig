@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inicio | TripPlanner{% endblock %}
+
+{% block body %}
+    {% block content %}
+    <section class="hero-section border-bottom border-5 sectionContenedores">
+        <video class="hero-video" autoplay muted loop playsinline>
+            <source src="{{ asset('videos/fondo.mp4') }}" type="video/mp4">
+            Tu navegador no soporta videos HTML5.
+        </video>
+        <div class="hero-overlay-dark"></div>
+        <div class="hero-content">
+            <h1>Bienvenido a TripPlanner</h1>
+            <p>Planifica tu viaje en pocos minutos de forma inteligente</p>
+            <a href="#" class="btn btn-primary btn-lg">Comenzar</a>
+        </div>
+    </section>
+    <section class="section2-div border-bottom border-5 sectionContenedores">
+        <div class="my-5 p-4 rounded bg-white section2-divMain1">
+            <div class="row bloqueInterno-divMain1 mb-3 border-bottom border-4">
+                <div class="col-md-6" class="">
+                    <img src="{{ asset('img/rutaFondoInicio.jpg') }}" alt="" class="imgInicio border border-2 opacity-75">
+                </div>
+                <div class="col-md-6 columnaBloqueInterno-divMain1">
+                    <h3 class="mb-3">Generador Multiruta</h3>
+                    <p class="w-75 text-align-center parrafoP">Nuestra inteligencia artificial analizará tu mensaje y generará varias rutas alternativas recomendadas, ofreciéndote opciones claras y optimizadas para tu viaje de la mano de varias atracciones turísticas diferentes.</p>
+                </div>
+            </div>
+            <div class="row bloqueInterno-divMain1 mb-3 border-bottom border-4">
+                <div class="col-md-6 columnaBloqueInterno-divMain1">
+                    <h3 class="mb-3">Generador de viajes completos</h3>
+                    <p class="w-75 text-align-center parrafoP">Analizará tus preferencias y creará itinerarios integrales y personalizados, ofreciéndote planes detallados y equilibrados para disfrutar al máximo de tu viaje con una selección variada de experiencias únicas</p>
+                </div>
+                <div class="col-md-6" class="">
+                    <img src="{{ asset('img/castilloFondoInicio.jpg') }}" alt="" class="imgInicio border border-2 opacity-75">
+                </div>
+            </div>
+            <div class="row bloqueInterno-divMain1 mb-3 border-bottom border-4">
+                <div class="col-md-6" class="">
+                    <img src="{{ asset('img/tokioFondoInicio.jpg') }}" alt="" class="imgInicio border border-2 opacity-75">
+                </div>
+                <div class="col-md-6 columnaBloqueInterno-divMain1">
+                    <h3 class="mb-3">Con sugerencias relevantes</h3>
+                    <p class="w-75 text-align-center parrafoP">Estudiaremos tus planes de viaje y te presentaremos recomendaciones útiles y bien ajustadas, ofreciéndote ideas claras y variadas para mejorar tu experiencia con propuestas que encajan perfectamente con tus intereses.</p>
+                </div>
+            </div>
+            <div class="row bloqueInterno-divMain1 mb-3">
+                <div class="col-md-6 columnaBloqueInterno-divMain1">
+                    <h3 class="mb-3">Optimizador y Planificador diario</h3>
+                    <p class="w-75 text-align-center parrafoP">Organizaremos cada jornada de tu viaje de forma clara y equilibrada, proponiendo un plan detallado y práctico que te ayude a aprovechar mejor tu tiempo con actividades ordenadas y bien distribuidas a lo largo del día.</p>
+                </div>
+                <div class="col-md-6" class="">
+                    <img src="{{ asset('img/catarataFondoInicio.jpg') }}" alt="" class="imgInicio border border-2 opacity-75">
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section3-div pt-5">
+        <div class="container text-center mt-2 py-2">
+            <h3 class="h3Seccion3">Capas dinámicas</h3>
+            <p class="parrafoPSeccion3">Disponemos de un diseño versátil y sencillo perfecto para indicarte todas las actividades y medios de transportes posibles en tu viaje</p>
+            <div class="row">
+                <div class="col">
+                    <div class="card cardSeccion3 py-4 px-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Actividades</h5>
+                            <p class="card-text">Descubre el abanico completo de experiencias y aventuras disponibles durante tu viaje. Te proporcionamos una vista extensa y detallada de todas las actividades posibles, desde visitas culturales imprescindibles y recorridos históricos, hasta opciones de ocio, gastronomía local y experiencias al aire libre. Nuestro objetivo es que aproveches cada momento, encontrando exactamente lo que deseas hacer para crear un itinerario memorable y personalizado a tus gustos.</p>
+                        </div>
+                        <div id="carruselCardSeccion3Actividades" class="carousel slide carruselCardsSeccion3Inicio" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                <img src="{{ asset('img/restauranteCardSeccion3Inicio.jpg') }}" class="d-block w-100 imgInicioSeccion3Carrusel" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                <img src="{{ asset('img/barcoActividadCardSeccion3Inicio.png') }}" class="d-block w-100 imgInicioSeccion3Carrusel" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                <img src="{{ asset('img/senderismoCardSeccion3Inicio.jpg') }}" class="d-block w-100 imgInicioSeccion3Carrusel" alt="...">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carruselCardSeccion3Actividades" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carruselCardSeccion3Actividades" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card cardSeccion3 py-4 px-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Transportes</h5>
+                            <p class="card-text">Simplifica tu planificación con nuestra vista exhaustiva de todas las opciones de transporte disponibles en tu destino. Analizamos y comparamos trenes, autobuses, vuelos, ferris, servicios de alquiler de coches y opciones de movilidad urbana. Te ofrecemos información clave sobre rutas, horarios y costos, garantizando que puedas elegir los medios más eficientes, cómodos y económicos para moverte con total libertad a lo largo de tu aventura.</p>
+                        </div>
+                        <div id="carruselCardSeccion3Transportes" class="carousel slide carruselCardsSeccion3Inicio" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                <img src="{{ asset('img/trenCardSeccion3Inicio.png') }}" class="d-block w-100 imgInicioSeccion3Carrusel" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                <img src="{{ asset('img/autobusCardSeccion3Inicio.png') }}" class="d-block w-100 imgInicioSeccion3Carrusel" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                <img src="{{ asset('img/avionCardSeccion3Inicio.png') }}" class="d-block w-100 imgInicioSeccion3Carrusel" alt="...">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carruselCardSeccion3Transportes" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carruselCardSeccion3Transportes" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="row mt-4 filaCardsSeccion3">
+                <div class="col d-flex justify-content-center">
+                    <div class="card cardSeccion3 py-4 px-4">
+                        <h5 class="card-title">Mapas Interactivos</h5>
+                        <p class="card-text">Todo viaje incluirá toda la información esencial acompañada de mapas dinámicos e intuitivos, para que visualices cada desplazamiento con total claridad y tengas siempre a mano la mejor orientación.</p>
+                        <div class="mapaContenedorInicioCardSeccion3 mx-auto border border-2" id="mapaInicioCard"></div>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </section>
+    <script src="{{ asset('js/Inicio.js') }}"></script>
+    {% endblock %}
+{% endblock %}

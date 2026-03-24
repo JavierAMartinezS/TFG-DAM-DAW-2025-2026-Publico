@@ -1,0 +1,16 @@
+.header {
+    background: transparent !important;
+}
+.logo {
+    height: 125px;
+}
+.navbar-nav {
+    gap: 15px 15px;
+}
+.nav-link {
+    color:#000;
+    font-size:18px;
+}
+.nav-link:hover,  .nav-link:active, .nav-link:focus{
+    color:#ffffff;
+}
