@@ -27,8 +27,11 @@
                                 </span>
                             </div>
                             <h1 class="display-6 fw-bold text-white mb-3">{{ viaje.nombre }}</h1>
-                            <p class="lead text-white-50 mb-0">
-                                {{ viaje.descripcion ?: 'Este viaje todavia no tiene una descripcion extendida.' }}
+                            <div class="viaje-hero-map-box">
+                                <div id="mapaViajeDetalle"></div>
+                            </div>
+                            <p id="viajeMapaEstado" class="viaje-map-status mb-0 mt-2">
+                                Buscando ciudades mencionadas en la descripcion...
                             </p>
                         </div>
                     </div>
@@ -110,7 +113,7 @@
             <div class="card border-0 shadow-lg mt-4">
                 <div class="card-body p-4 p-lg-5">
                     <h2 class="h4 fw-bold mb-3">Descripcion completa del viaje</h2>
-                    <p class="mb-4 text-secondary">
+                    <p class="mb-4 text-secondary" style="white-space: pre-line;">
                         {% if viaje.descripcion %}
                             {{ viaje.descripcion }}
                         {% else %}
@@ -124,4 +127,12 @@
             </div>
         </div>
     </section>
+
+    <script>
+        window.viajeDetalle = {{ {
+            nombre: viaje.nombre,
+            descripcion: viaje.descripcion ?: ''
+        }|json_encode|raw }};
+    </script>
+    <script src="{{ asset('js/ViajeDetalle.js') }}?v=20260407d"></script>
 {% endblock %}

@@ -214,6 +214,24 @@ input, select {
     border-radius: 1.2rem;
 }
 
+.viaje-hero-map-box {
+    border-radius: 14px;
+    border: 2px solid rgba(194, 182, 110, 0.35);
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+#mapaViajeDetalle {
+    height: 210px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.viaje-map-status {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 0.92rem;
+}
+
 .viaje-detalle-side {
     border-radius: 1.2rem;
 }

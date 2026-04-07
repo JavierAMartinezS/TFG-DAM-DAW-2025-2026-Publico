@@ -32,7 +32,7 @@ class Viaje
     #[ORM\Column(nullable: true)]
     private ?float $presupuestoEstimado = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descripcion = null;
 
     #[ORM\ManyToOne(targetEntity: TipoViaje::class, inversedBy: 'viajes')]

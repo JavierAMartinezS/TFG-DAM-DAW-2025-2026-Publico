@@ -10,6 +10,11 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ChatController extends AbstractController
 {
+    private const OLLAMA_URL = 'http://localhost:11434/api/chat';
+    private const OLLAMA_MODEL = 'llama3';
+    private const SPANISH_RULE = 'Idioma obligatorio: responde siempre en espanol. No uses ingles ni otros idiomas.';
+    private const DAY_PLACE_RULE = 'Cuando escribas itinerarios, cada jornada DEBE empezar con el formato exacto "Dia X: Lugar principal". "Lugar principal" debe ser una ciudad, pueblo o lugar geografico real y concreto (por ejemplo parque natural, parque nacional o zona tematica real). No uses etiquetas genericas como "Llegada", "Visita", "Entrada", "Manana" o similares como lugar.';
+
     #[Route('/api/chat/ollama', name: 'chat_ollama', methods: ['POST'])]
     public function chat(Request $request, HttpClientInterface $httpClient): JsonResponse
     {
@@ -19,63 +24,68 @@ class ChatController extends AbstractController
         $viajeros = $data['numViajeros'] ?? '';
         $fechas = $data['fechas'] ?? '';
         $presupuesto = $data['presupuesto'] ?? '';
+        $viajesExcluidos = $data['viajesExcluidos'] ?? [];
 
         $request->getSession()->set('viaje_base', [
             'tipoViaje' => $tipoViaje,
             'numViajeros' => $viajeros,
             'fechas' => $fechas,
-            'presupuesto' => $presupuesto
+            'presupuesto' => $presupuesto,
         ]);
 
+        $lineaExclusiones = '';
+        if (is_array($viajesExcluidos) && count($viajesExcluidos) > 0) {
+            $lineaExclusiones = "\nNo propongas estos destinos o titulos ya mostrados: " . implode(', ', $viajesExcluidos);
+        }
+
         $payload = [
-            'model' => 'llama3',
+            'model' => self::OLLAMA_MODEL,
             'stream' => false,
             'messages' => [
                 [
                     'role' => 'system',
-                    'content' => 'Eres un planificador de viajes profesional. Cumples estrictamente las condiciones del usuario y no improvisas.'
+                    'content' => 'Eres un planificador de viajes profesional. Cumples estrictamente las condiciones del usuario y no improvisas. ' . self::SPANISH_RULE,
                 ],
                 [
                     'role' => 'user',
                     'content' => "Genera 5 viajes reales distintos cumpliendo obligatoriamente:
-                    Tipo de viaje: {$tipoViaje}
-                    Viajeros: {$viajeros}
-                    Fechas/duración: {$fechas}
-                    Presupuesto máximo: {$presupuesto} €
+Tipo de viaje: {$tipoViaje}
+Viajeros: {$viajeros}
+Fechas/duracion: {$fechas}
+Presupuesto maximo: {$presupuesto} EUR{$lineaExclusiones}
 
-                    Devuelve SOLO un JSON válido con estructura:
-                    {
-                    \"viajes\": [
-                        {\"titulo\":\"string\",\"descripcion\":\"string\"}
-                    ]
-                    }
+Devuelve SOLO un JSON valido con estructura:
+{
+  \"viajes\": [
+    {\"titulo\":\"string\",\"descripcion\":\"string\"}
+  ]
+}
 
-                    No repitas destinos anteriores ni inventes datos.
-                    Los viajes deben estar detallados en castellano (español)"
-                ]
-            ]
+No inventes datos y escribe todos los textos solo en espanol.",
+                ],
+            ],
         ];
 
-        $response = $httpClient->request('POST', 'http://localhost:11434/api/chat', [
+        $response = $httpClient->request('POST', self::OLLAMA_URL, [
             'json' => $payload,
-            'timeout' => 180
+            'timeout' => 180,
         ]);
 
         $decoded = json_decode($response->getContent(false), true);
 
         if (!isset($decoded['message']['content'])) {
-            return new JsonResponse(['error' => 'Respuesta inválida de Ollama'], 500);
+            return new JsonResponse(['error' => 'Respuesta invalida de Ollama'], 500);
         }
 
         $raw = $decoded['message']['content'];
         if (!preg_match('/\{[\s\S]*\}/', $raw, $matches)) {
-            return new JsonResponse(['error' => 'No se encontró JSON en la respuesta', 'raw' => $raw], 500);
+            return new JsonResponse(['error' => 'No se encontro JSON en la respuesta', 'raw' => $raw], 500);
         }
 
         $final = json_decode($matches[0], true);
 
         if (!$final || !isset($final['viajes'])) {
-            return new JsonResponse(['error' => 'JSON inválido o sin viajes', 'raw' => $matches[0]], 500);
+            return new JsonResponse(['error' => 'JSON invalido o sin viajes', 'raw' => $matches[0]], 500);
         }
 
         return new JsonResponse($final);
@@ -91,29 +101,35 @@ class ChatController extends AbstractController
         $request->getSession()->set('viaje_seleccionado', $viaje);
 
         $payload = [
-            'model' => 'llama3',
+            'model' => self::OLLAMA_MODEL,
             'stream' => false,
             'messages' => [
                 [
                     'role' => 'system',
-                    'content' => "Eres un planificador experto. El destino elegido es {$viaje}. Toda respuesta futura debe basarse EXCLUSIVAMENTE en este destino."
+                    'content' => "Eres un planificador experto. El destino elegido es {$viaje}. Toda respuesta debe basarse exclusivamente en este destino. " . self::SPANISH_RULE . ' ' . self::DAY_PLACE_RULE,
                 ],
                 [
                     'role' => 'user',
                     'content' => "Con estos datos obligatorios:
-                    Tipo de viaje: {$base['tipoViaje']}
-                    Viajeros: {$base['numViajeros']}
-                    Fechas/duración: {$base['fechas']}
-                    Presupuesto: {$base['presupuesto']} €
+Tipo de viaje: " . ($base['tipoViaje'] ?? '') . "
+Viajeros: " . ($base['numViajeros'] ?? '') . "
+Fechas/duracion: " . ($base['fechas'] ?? '') . "
+Presupuesto: " . ($base['presupuesto'] ?? '') . " EUR
 
-                    Genera un itinerario realista y detallado día a día para {$viaje}."
-                ]
-            ]
+Genera un itinerario realista y detallado dia a dia para {$viaje}.
+Formato obligatorio de encabezados:
+Dia 1: <Lugar principal>
+Dia 2: <Lugar principal>
+...
+No omitas el lugar principal en ninguna jornada.
+Responde solo en espanol.",
+                ],
+            ],
         ];
 
-        $response = $httpClient->request('POST', 'http://localhost:11434/api/chat', [
+        $response = $httpClient->request('POST', self::OLLAMA_URL, [
             'json' => $payload,
-            'timeout' => 180
+            'timeout' => 180,
         ]);
 
         $decoded = json_decode($response->getContent(false), true);
@@ -135,30 +151,33 @@ class ChatController extends AbstractController
         }
 
         $payload = [
-            'model' => 'llama3',
+            'model' => self::OLLAMA_MODEL,
             'stream' => false,
             'messages' => [
                 [
                     'role' => 'system',
-                    'content' => "Destino fijo: {$destino}. Responde SIEMPRE en base a este lugar. No cambies de ciudad ni país bajo ningún concepto."
+                    'content' => "Destino fijo: {$destino}. Responde siempre en base a este lugar y no cambies de ciudad o pais. " . self::SPANISH_RULE . ' ' . self::DAY_PLACE_RULE,
                 ],
                 [
                     'role' => 'user',
                     'content' => "Contexto obligatorio:
-                    Tipo de viaje: {$base['tipoViaje']}
-                    Viajeros: {$base['numViajeros']}
-                    Fechas/duración: {$base['fechas']}
-                    Presupuesto: {$base['presupuesto']} €
+Tipo de viaje: " . ($base['tipoViaje'] ?? '') . "
+Viajeros: " . ($base['numViajeros'] ?? '') . "
+Fechas/duracion: " . ($base['fechas'] ?? '') . "
+Presupuesto: " . ($base['presupuesto'] ?? '') . " EUR
 
-                    Pregunta del usuario:
-                    {$mensaje}"
-                ]
-            ]
+Pregunta del usuario:
+{$mensaje}
+
+Si devuelves un plan por dias, usa siempre el formato \"Dia X: Lugar principal\".
+Responde solo en espanol.",
+                ],
+            ],
         ];
 
-        $response = $httpClient->request('POST', 'http://localhost:11434/api/chat', [
+        $response = $httpClient->request('POST', self::OLLAMA_URL, [
             'json' => $payload,
-            'timeout' => 180
+            'timeout' => 180,
         ]);
 
         $decoded = json_decode($response->getContent(false), true);
