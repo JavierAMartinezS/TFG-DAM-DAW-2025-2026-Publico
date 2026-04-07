@@ -1,0 +1,212 @@
+.sug-page {
+    background:
+        radial-gradient(circle at 8% 8%, rgba(194, 182, 110, 0.22), transparent 34%),
+        radial-gradient(circle at 90% 0%, rgba(0, 119, 182, 0.24), transparent 35%),
+        linear-gradient(130deg, #243c42 0%, #2f515a 52%, #3f666c 100%);
+    min-height: 100%;
+}
+
+.sug-hero-card {
+    border-radius: 18px;
+    border: 1px solid rgba(194, 182, 110, 0.55);
+    background: linear-gradient(150deg, rgba(20, 34, 40, 0.94) 0%, rgba(35, 65, 73, 0.9) 100%);
+    padding: 1.3rem 1.4rem;
+}
+
+.sug-hero-content h1 {
+    color: #ffffff;
+    font-weight: 800;
+    font-size: clamp(1.45rem, 3vw, 2rem);
+}
+
+.sug-hero-content p {
+    color: rgba(255, 255, 255, 0.86);
+    max-width: 850px;
+    margin: 0;
+}
+
+.sug-empty-state {
+    background: linear-gradient(140deg, rgba(31, 46, 51, 0.92) 0%, rgba(52, 74, 80, 0.92) 100%);
+    border: 1px dashed rgba(194, 182, 110, 0.6);
+    border-radius: 16px;
+    padding: 1.4rem;
+    text-align: center;
+}
+
+.sug-empty-state h2 {
+    color: #ffffff;
+}
+
+.sug-empty-state p {
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.sug-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.sug-trip-card {
+    border-radius: 16px;
+    border: 1px solid rgba(194, 182, 110, 0.45);
+    background: linear-gradient(145deg, rgba(25, 43, 47, 0.94) 0%, rgba(44, 73, 79, 0.93) 100%);
+    padding: 1rem;
+}
+
+.sug-trip-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: start;
+    margin-bottom: 0.55rem;
+}
+
+.sug-trip-head h3 {
+    color: #ffffff;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.sug-trip-head p {
+    color: rgba(255, 255, 255, 0.72);
+    margin: 0;
+    font-size: 0.87rem;
+}
+
+.sug-trip-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.93rem;
+}
+
+.sug-trip-desc {
+    color: rgba(255, 255, 255, 0.84);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.7rem 0.75rem;
+    border-radius: 11px;
+    margin: 0.7rem 0;
+    font-size: 0.9rem;
+}
+
+.sug-trip-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.sug-status {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.88rem;
+}
+
+.sug-loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    color: rgba(255, 255, 255, 0.87);
+}
+
+.sug-error {
+    margin-top: 0.8rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 99, 71, 0.55);
+    background: rgba(220, 53, 69, 0.14);
+    color: #ffd6db;
+    padding: 0.65rem 0.7rem;
+    font-size: 0.9rem;
+}
+
+.sug-content {
+    margin-top: 0.8rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(194, 182, 110, 0.2);
+    padding: 0.9rem;
+}
+
+.sug-summary {
+    margin-bottom: 0.85rem;
+    color: rgba(255, 255, 255, 0.91);
+    white-space: pre-line;
+}
+
+.sug-sections-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+}
+
+.sug-section {
+    background: rgba(16, 32, 36, 0.66);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 0.62rem 0.68rem;
+}
+
+.sug-section h4 {
+    margin: 0 0 0.5rem 0;
+    color: #d8ca7f;
+    font-size: 0.93rem;
+    font-weight: 700;
+}
+
+.sug-section ul {
+    margin: 0;
+    padding-left: 1.05rem;
+}
+
+.sug-section li {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.86rem;
+    margin-bottom: 0.35rem;
+}
+
+.sug-clima-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
+.sug-clima-sub h5 {
+    color: #9ed4ff;
+    font-size: 0.82rem;
+    margin-bottom: 0.3rem;
+    font-weight: 700;
+}
+
+.sug-clima-sub ul {
+    margin: 0;
+    padding-left: 1rem;
+}
+
+.sug-clima-sub li {
+    font-size: 0.82rem;
+}
+
+@media (max-width: 991px) {
+    .sug-sections-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sug-clima-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sug-trip-head {
+        flex-direction: column;
+    }
+
+    .sug-trip-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+

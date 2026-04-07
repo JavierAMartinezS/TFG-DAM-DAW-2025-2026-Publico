@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sugerencias IA | TripPlanner{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/sugerenciasIA.css') }}">
+{% endblock %}
+
+{% block body %}
+    <section class="sug-page py-5">
+        <div class="container">
+            <div class="sug-hero-card shadow-lg">
+                <div class="sug-hero-content">
+                    <span class="badge text-bg-warning text-dark rounded-pill px-3 py-2">Sugerencias IA</span>
+                    <h1 class="mt-3 mb-2">Tu asesor de viaje mas completo</h1>
+                    <p class="mb-0">
+                        Analizamos cada viaje guardado para proponerte donde comer, donde alojarte,
+                        que visitar segun el clima, que transporte usar y muchas recomendaciones
+                        extra para que no se te escape nada importante.
+                    </p>
+                </div>
+            </div>
+
+            {% if viajes is empty %}
+                <div class="sug-empty-state mt-4">
+                    <h2>Aun no hay viajes guardados</h2>
+                    <p>Guarda un viaje desde la seccion Viajes para generar sugerencias inteligentes.</p>
+                    <a class="btn btn-primary" href="{{ path('app_viaje') }}">Ir a Viajes</a>
+                </div>
+            {% else %}
+                <div class="sug-grid mt-4">
+                    {% for viaje in viajes %}
+                        <article class="sug-trip-card shadow-sm" data-viaje-id="{{ viaje.id }}">
+                            <div class="sug-trip-head">
+                                <div>
+                                    <h3 class="mb-1">{{ viaje.nombre }}</h3>
+                                    <p class="mb-0">ID #{{ viaje.id }}</p>
+                                </div>
+                                <div class="d-flex flex-wrap gap-2 justify-content-end">
+                                    <span class="badge text-bg-light text-dark rounded-pill">{{ viaje.tipoViaje ? viaje.tipoViaje.nombre : 'Tipo no definido' }}</span>
+                                    <span class="badge text-bg-info rounded-pill">
+                                        {% if viaje.presupuestoEstimado is not null %}
+                                            {{ viaje.presupuestoEstimado|number_format(0, ',', '.') }} EUR
+                                        {% else %}
+                                            Presupuesto libre
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="sug-trip-meta">
+                                <span><strong>Fechas:</strong> {{ viaje.fechaInicio ? viaje.fechaInicio|date('d/m/Y') : 'Flexible' }} - {{ viaje.fechaFin ? viaje.fechaFin|date('d/m/Y') : 'Flexible' }}</span>
+                                <a href="{{ path('app_viaje_detalle', {id: viaje.id}) }}" class="btn btn-outline-light btn-sm">Ver detalle viaje</a>
+                            </div>
+
+                            <div class="sug-trip-desc">
+                                {{ viaje.descripcion ? viaje.descripcion|slice(0, 230) ~ (viaje.descripcion|length > 230 ? '...' : '') : 'Sin descripcion guardada. Se usaran los datos disponibles del viaje.' }}
+                            </div>
+
+                            <div class="sug-trip-actions">
+                                <button class="btn btn-primary btn-sm sug-refresh-btn" type="button">Regenerar sugerencias</button>
+                                <span class="sug-status">Preparando analisis IA...</span>
+                            </div>
+
+                            <div class="sug-loading">
+                                <div class="spinner-border spinner-border-sm text-light" role="status"></div>
+                                <span>Generando recomendaciones completas...</span>
+                            </div>
+
+                            <div class="sug-error d-none"></div>
+                            <div class="sug-content d-none"></div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <script src="{{ asset('js/SugerenciasIA.js') }}?v=20260407a"></script>
+{% endblock %}
+
