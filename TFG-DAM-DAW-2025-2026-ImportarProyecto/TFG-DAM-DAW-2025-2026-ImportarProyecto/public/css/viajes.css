@@ -123,6 +123,83 @@ input, select {
      background-color: #486567 !important;
 }
 
+#mis-viajes {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+}
+
+.mis-viaje-card {
+    background: linear-gradient(140deg, rgba(36, 51, 53, 0.95) 0%, rgba(49, 74, 79, 0.92) 100%);
+    border: 1px solid rgba(194, 182, 110, 0.45);
+    border-radius: 14px;
+    padding: 1rem;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+.mis-viaje-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.65rem;
+}
+
+.mis-viaje-title {
+    margin: 0;
+    font-size: 1.08rem;
+    color: #f8f9fa;
+    font-weight: 700;
+}
+
+.mis-viaje-type-badge {
+    background: #c2b66e;
+    color: #2f3d40;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    white-space: nowrap;
+}
+
+.mis-viaje-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.9rem;
+    margin-bottom: 0.85rem;
+}
+
+.mis-viaje-meta strong {
+    color: #c2b66e;
+}
+
+.mis-viaje-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.55rem;
+}
+
+.mis-viajes-empty-state {
+    background: linear-gradient(140deg, rgba(44, 59, 62, 0.95) 0%, rgba(57, 80, 85, 0.92) 100%);
+    border: 1px dashed rgba(194, 182, 110, 0.6);
+    border-radius: 14px;
+    padding: 1.2rem 1rem;
+    text-align: center;
+}
+
+.mis-viajes-empty-state h4 {
+    color: #f8f9fa;
+    margin-bottom: 0.45rem;
+    font-size: 1.1rem;
+}
+
+.mis-viajes-empty-state p {
+    color: rgba(255, 255, 255, 0.82);
+    margin: 0;
+}
+
 /* DETALLE VIAJE */
 .viaje-detalle-page {
     background:
@@ -176,5 +253,15 @@ input, select {
     .viaje-detalle-page {
         padding-top: 1.75rem !important;
         padding-bottom: 1.75rem !important;
+    }
+
+    .mis-viaje-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .mis-viaje-actions {
+        justify-content: flex-start;
+        width: 100%;
     }
 }

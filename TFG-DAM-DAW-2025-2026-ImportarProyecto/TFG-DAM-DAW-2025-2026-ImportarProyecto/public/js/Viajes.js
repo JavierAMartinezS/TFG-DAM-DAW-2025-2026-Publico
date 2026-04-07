@@ -196,30 +196,61 @@ async function renderMisViajes() {
     const res = await fetch("/api/viajes/listar");
     if (!res.ok) return;
     const viajes = await res.json();
+
+    if (!viajes.length) {
+        container.innerHTML = `
+            <div class="mis-viajes-empty-state">
+                <h4>Todavia no tienes viajes guardados</h4>
+                <p>Crea un viaje con el asistente IA y aqui apareceran tus planes listos para revisar.</p>
+            </div>
+        `;
+        return;
+    }
+
     viajes.forEach(v => {
         const div = document.createElement("div");
-        div.style.display = "flex";
-        div.style.justifyContent = "space-between";
-        div.style.alignItems = "center";
-        div.style.marginBottom = "0.5rem";
-        div.style.width = "100%";
+        div.className = "mis-viaje-card";
 
-        const nombre = document.createElement("span");
-        nombre.textContent = v.nombre;
+        const cabecera = document.createElement("div");
+        cabecera.className = "mis-viaje-card-header";
+
+        const nombre = document.createElement("h5");
+        nombre.className = "mis-viaje-title";
+        nombre.textContent = v.nombre || "Viaje sin nombre";
+
+        const tipo = document.createElement("span");
+        tipo.className = "mis-viaje-type-badge";
+        tipo.textContent = v.tipoViaje || "Sin tipo";
+
+        cabecera.appendChild(nombre);
+        cabecera.appendChild(tipo);
+
+        const meta = document.createElement("div");
+        meta.className = "mis-viaje-meta";
+
+        const fechaInicio = v.fechaInicio ? v.fechaInicio : "Flexible";
+        const fechaFin = v.fechaFin ? v.fechaFin : "Flexible";
+        const presupuesto = v.presupuestoEstimado !== null && v.presupuestoEstimado !== undefined
+            ? `${Number(v.presupuestoEstimado).toLocaleString("es-ES")} EUR`
+            : "No definido";
+
+        meta.innerHTML = `
+            <span><strong>Fechas:</strong> ${fechaInicio} -> ${fechaFin}</span>
+            <span><strong>Presupuesto:</strong> ${presupuesto}</span>
+        `;
 
         const botones = document.createElement("div");
-        botones.style.display = "flex";
-        botones.style.gap = "0.5rem";
+        botones.className = "mis-viaje-actions";
 
         const ver = document.createElement("button");
-        ver.className = "btn btn-primary btn-sm";
+        ver.className = "btn btn-primary btn-sm px-3";
         ver.textContent = "Ver detalles";
         ver.onclick = () => {
             window.location.href = `/viajes/${v.id}`;
         };
 
         const eliminar = document.createElement("button");
-        eliminar.className = "btn btn-danger btn-sm";
+        eliminar.className = "btn btn-outline-danger btn-sm px-3";
         eliminar.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16"><path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/></svg>`;
         eliminar.onclick = async () => {
             await fetch(`/api/viajes/eliminar/${v.id}`, { method: "DELETE" });
@@ -228,7 +259,8 @@ async function renderMisViajes() {
 
         botones.appendChild(ver);
         botones.appendChild(eliminar);
-        div.appendChild(nombre);
+        div.appendChild(cabecera);
+        div.appendChild(meta);
         div.appendChild(botones);
         container.appendChild(div);
     });
