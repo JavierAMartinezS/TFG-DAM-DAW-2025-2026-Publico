@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ viaje.nombre }} | Detalle Viaje{% endblock %}
+
+{% block body %}
+    <section class="viaje-detalle-page py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                <a href="{{ path('app_viaje') }}" class="btn btn-outline-light px-4">
+                    Volver a Viajes
+                </a>
+                <span class="badge rounded-pill text-bg-light text-dark px-3 py-2">
+                    Referencia #{{ viaje.id }}
+                </span>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="card viaje-detalle-hero border-0 shadow-lg h-100">
+                        <div class="card-body p-4 p-lg-5">
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <span class="badge rounded-pill text-bg-warning text-dark px-3 py-2">
+                                    {{ viaje.tipoViaje ? viaje.tipoViaje.nombre : 'Tipo sin definir' }}
+                                </span>
+                                <span class="badge rounded-pill text-bg-info px-3 py-2">
+                                    Plan guardado
+                                </span>
+                            </div>
+                            <h1 class="display-6 fw-bold text-white mb-3">{{ viaje.nombre }}</h1>
+                            <p class="lead text-white-50 mb-0">
+                                {{ viaje.descripcion ?: 'Este viaje todavia no tiene una descripcion extendida.' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card viaje-detalle-side border-0 shadow h-100">
+                        <div class="card-body p-4">
+                            <h2 class="h5 fw-bold mb-4">Resumen rapido</h2>
+
+                            <div class="viaje-detail-item">
+                                <small>Fecha de inicio</small>
+                                <strong>{{ viaje.fechaInicio ? viaje.fechaInicio|date('d/m/Y') : 'No definida' }}</strong>
+                            </div>
+
+                            <div class="viaje-detail-item">
+                                <small>Fecha de fin</small>
+                                <strong>{{ viaje.fechaFin ? viaje.fechaFin|date('d/m/Y') : 'No definida' }}</strong>
+                            </div>
+
+                            <div class="viaje-detail-item">
+                                <small>Duracion estimada</small>
+                                <strong>{{ duracionDias ? duracionDias ~ ' dias' : 'No calculable' }}</strong>
+                            </div>
+
+                            <div class="viaje-detail-item border-0 mb-0 pb-0">
+                                <small>Presupuesto estimado</small>
+                                <strong>
+                                    {% if viaje.presupuestoEstimado is not null %}
+                                        {{ viaje.presupuestoEstimado|number_format(2, ',', '.') }} EUR
+                                    {% else %}
+                                        No definido
+                                    {% endif %}
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mt-1">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100 viaje-metric-card">
+                        <div class="card-body p-4">
+                            <h3 class="h6 text-uppercase fw-bold text-secondary mb-3">Categoria</h3>
+                            <p class="fs-4 fw-bold mb-2">{{ viaje.tipoViaje ? viaje.tipoViaje.nombre : 'Sin tipo' }}</p>
+                            <p class="mb-0 text-muted">Plan adaptado al estilo elegido en el asistente.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100 viaje-metric-card">
+                        <div class="card-body p-4">
+                            <h3 class="h6 text-uppercase fw-bold text-secondary mb-3">Rango temporal</h3>
+                            <p class="fs-4 fw-bold mb-2">
+                                {% if viaje.fechaInicio and viaje.fechaFin %}
+                                    {{ viaje.fechaInicio|date('d M') }} - {{ viaje.fechaFin|date('d M') }}
+                                {% else %}
+                                    Flexible
+                                {% endif %}
+                            </p>
+                            <p class="mb-0 text-muted">Fechas disponibles para organizar actividades y traslados.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100 viaje-metric-card">
+                        <div class="card-body p-4">
+                            <h3 class="h6 text-uppercase fw-bold text-secondary mb-3">Estado</h3>
+                            <p class="fs-4 fw-bold mb-2 text-success">Guardado</p>
+                            <p class="mb-0 text-muted">Tu viaje esta registrado y listo para seguir mejorandolo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-lg mt-4">
+                <div class="card-body p-4 p-lg-5">
+                    <h2 class="h4 fw-bold mb-3">Descripcion completa del viaje</h2>
+                    <p class="mb-4 text-secondary">
+                        {% if viaje.descripcion %}
+                            {{ viaje.descripcion }}
+                        {% else %}
+                            Aun no hay una descripcion detallada para este viaje. Puedes generarla desde la conversacion con IA y volver a guardarlo.
+                        {% endif %}
+                    </p>
+                    <div class="alert alert-info mb-0">
+                        Consejo: usa esta ficha para revisar tu viaje antes de crear nuevas propuestas con IA o eliminarlo.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

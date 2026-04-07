@@ -122,3 +122,59 @@ input, select {
 .accordion-body {
      background-color: #486567 !important;
 }
+
+/* DETALLE VIAJE */
+.viaje-detalle-page {
+    background:
+        radial-gradient(circle at 10% 20%, rgba(255, 223, 146, 0.22), transparent 35%),
+        radial-gradient(circle at 90% 10%, rgba(41, 149, 255, 0.20), transparent 40%),
+        linear-gradient(135deg, #1f3b4d 0%, #2f5b68 45%, #3e6f6a 100%);
+    min-height: 100%;
+}
+
+.viaje-detalle-hero {
+    background: linear-gradient(140deg, #1b2735 0%, #2f4f6f 50%, #3f7a8c 100%);
+    border-radius: 1.2rem;
+}
+
+.viaje-detalle-side {
+    border-radius: 1.2rem;
+}
+
+.viaje-detail-item {
+    border-bottom: 1px solid #e9ecef;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.viaje-detail-item small {
+    color: #6c757d;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.viaje-detail-item strong {
+    font-size: 1.04rem;
+    color: #263238;
+}
+
+.viaje-metric-card {
+    border-radius: 1rem;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.viaje-metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.12) !important;
+}
+
+@media (max-width: 991px) {
+    .viaje-detalle-page {
+        padding-top: 1.75rem !important;
+        padding-bottom: 1.75rem !important;
+    }
+}

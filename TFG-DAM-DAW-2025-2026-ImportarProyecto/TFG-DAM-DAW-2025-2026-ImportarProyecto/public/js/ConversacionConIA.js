@@ -242,7 +242,9 @@ async function renderMisViajes() {
         const ver = document.createElement("button");
         ver.className = "btn btn-primary btn-sm";
         ver.textContent = "Ver detalles";
-        ver.onclick = () => alert(v.descripcion);
+        ver.onclick = () => {
+            window.location.href = `/viajes/${v.id}`;
+        };
 
         const eliminar = document.createElement("button");
         eliminar.className = "btn btn-danger btn-sm";

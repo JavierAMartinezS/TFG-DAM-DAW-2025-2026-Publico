@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Viaje;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +16,26 @@ final class ViajesController extends AbstractController
     public function index(): Response
     {
         return $this->render('inicio/Viajes.html.twig');
+    }
+
+    #[Route('/viajes/{id}', name: 'app_viaje_detalle', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function detalle(int $id, EntityManagerInterface $em): Response
+    {
+        $viaje = $em->getRepository(Viaje::class)->find($id);
+
+        if (!$viaje) {
+            throw $this->createNotFoundException('Viaje no encontrado.');
+        }
+
+        $duracionDias = null;
+        if ($viaje->getFechaInicio() && $viaje->getFechaFin()) {
+            $duracionDias = $viaje->getFechaInicio()->diff($viaje->getFechaFin())->days + 1;
+        }
+
+        return $this->render('inicio/ViajeDetalle.html.twig', [
+            'viaje' => $viaje,
+            'duracionDias' => $duracionDias,
+        ]);
     }
 
     #[Route('/guardar-datos-viaje', name: 'guardar_datos_viaje', methods: ['POST'])]
