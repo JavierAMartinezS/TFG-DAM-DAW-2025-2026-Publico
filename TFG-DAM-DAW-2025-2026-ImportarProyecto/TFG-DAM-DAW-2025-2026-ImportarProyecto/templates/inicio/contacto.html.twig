@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contacto | TripPlanner{% endblock %}
+
+{% block body %}
+    <section class="contacto-page py-5">
+        <div class="container">
+            <div class="row g-4 align-items-stretch">
+                <div class="col-lg-5">
+                    <div class="contacto-info-card h-100 shadow-lg border-0">
+                        <div class="p-4 p-lg-5">
+                            <span class="badge rounded-pill text-bg-warning text-dark mb-3">TripPlanner Support</span>
+                            <h1 class="display-6 text-white fw-bold mb-3">Hablemos de tu proximo viaje</h1>
+                            <p class="text-white-50 mb-4">
+                                Si tienes dudas sobre itinerarios, sugerencias IA o mejoras para la plataforma,
+                                este canal va directo a nuestro equipo.
+                            </p>
+
+                            <div class="contacto-feature">
+                                <h2>Respuesta rapida</h2>
+                                <p>Normalmente respondemos en menos de 24 horas laborables.</p>
+                            </div>
+                            <div class="contacto-feature">
+                                <h2>Soporte real</h2>
+                                <p>Te ayudamos con casos concretos de uso, no respuestas genericas.</p>
+                            </div>
+                            <div class="contacto-feature mb-0">
+                                <h2>Seguimiento continuo</h2>
+                                <p>Mantenemos el hilo abierto hasta dejar tu caso resuelto.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="card contacto-form-card border-0 shadow-lg h-100">
+                        <div class="card-body p-4 p-lg-5">
+                            <h2 class="h3 fw-bold mb-2">Formulario de contacto</h2>
+                            <p class="text-secondary mb-4">Completa los datos y te contestaremos por email.</p>
+
+                            {% for message in app.flashes('success') %}
+                                <div class="alert alert-success">{{ message }}</div>
+                            {% endfor %}
+
+                            <form method="post" class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="nombre" class="form-label fw-semibold">Nombre</label>
+                                    <input type="text" class="form-control form-control-lg" id="nombre" name="nombre" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="apellidos" class="form-label fw-semibold">Apellidos</label>
+                                    <input type="text" class="form-control form-control-lg" id="apellidos" name="apellidos" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label fw-semibold">Email</label>
+                                    <input type="email" class="form-control form-control-lg" id="email" name="email" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="asunto" class="form-label fw-semibold">Asunto</label>
+                                    <input type="text" class="form-control form-control-lg" id="asunto" name="asunto" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="motivo" class="form-label fw-semibold">Motivo</label>
+                                    <select id="motivo" name="motivo" class="form-select form-select-lg" required>
+                                        <option value="">Selecciona una opcion</option>
+                                        <option value="duda">Duda funcional</option>
+                                        <option value="sugerencia">Sugerencia de mejora</option>
+                                        <option value="error">Reporte de error</option>
+                                        <option value="otro">Otro</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label for="mensaje" class="form-label fw-semibold">Mensaje</label>
+                                    <textarea id="mensaje" name="mensaje" class="form-control" rows="6" maxlength="1500" required></textarea>
+                                </div>
+                                <div class="col-12 d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-lg btn-contacto px-4">
+                                        Enviar mensaje
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+

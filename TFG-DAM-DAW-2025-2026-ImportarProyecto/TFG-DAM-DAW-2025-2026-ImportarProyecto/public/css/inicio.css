@@ -188,3 +188,64 @@ h3 {
     border-radius: 15px;
     border-color: #C2B66E !important;
 }
+
+/* CONTACTO */
+.contacto-page {
+    background:
+        radial-gradient(circle at 12% 10%, rgba(194, 182, 110, 0.16), transparent 35%),
+        radial-gradient(circle at 85% 5%, rgba(0, 119, 182, 0.20), transparent 32%),
+        linear-gradient(135deg, #304142 0%, #2b4b53 52%, #486567 100%);
+    min-height: 100%;
+}
+
+.contacto-info-card {
+    background: linear-gradient(155deg, #1f2f33 0%, #2b4f59 65%, #3f6c71 100%);
+    border-radius: 1.25rem;
+}
+
+.contacto-form-card {
+    border-radius: 1.25rem;
+}
+
+.contacto-feature {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+}
+
+.contacto-feature h2 {
+    color: #f8f9fa;
+    font-size: 1.05rem;
+    margin-bottom: 0.2rem;
+}
+
+.contacto-feature p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.95rem;
+}
+
+.contacto-form-card .form-control,
+.contacto-form-card .form-select {
+    border-radius: 0.75rem;
+    border: 1px solid #d8dee2;
+}
+
+.contacto-form-card .form-control:focus,
+.contacto-form-card .form-select:focus {
+    border-color: #0077B6;
+    box-shadow: 0 0 0 0.18rem rgba(0, 119, 182, 0.2);
+}
+
+.btn-contacto {
+    background: linear-gradient(120deg, #0077B6 0%, #005a87 100%);
+    border: 0;
+    color: #fff;
+    border-radius: 0.8rem;
+    font-weight: 600;
+}
+
+.btn-contacto:hover {
+    color: #fff;
+    filter: brightness(1.06);
+}
