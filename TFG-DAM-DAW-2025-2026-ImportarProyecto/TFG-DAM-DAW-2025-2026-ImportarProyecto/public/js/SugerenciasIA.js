@@ -182,7 +182,7 @@ async function generarParaCard(card, isAutoLoad = false) {
     }
 
     clearError(card);
-    setLoading(card, true, isAutoLoad ? "Analizando viaje con IA..." : "Regenerando sugerencias...");
+    setLoading(card, true, isAutoLoad ? "Analizando viaje con IA..." : "Generando sugerencias...");
 
     try {
         const res = await fetch(`/api/sugerencias-ia/viaje/${viajeId}`, {
@@ -191,22 +191,23 @@ async function generarParaCard(card, isAutoLoad = false) {
             body: JSON.stringify({}),
         });
 
-        const data = await res.json();
+        const rawText = await res.text();
+        let data = null;
+        try {
+            data = JSON.parse(rawText);
+        } catch (_) {
+            throw new Error("El servicio de sugerencias no respondio correctamente. Intenta de nuevo en unos segundos.");
+        }
+
         if (!res.ok || !data.ok) {
-            throw new Error(data.error || "No se pudieron generar sugerencias.");
+            throw new Error("No se pudieron generar sugerencias en este momento. Vuelve a intentarlo.");
         }
 
         renderSugerencias(card, data.sugerencias || {});
         setLoading(card, false, "Sugerencias IA listas.");
     } catch (error) {
         setLoading(card, false, "Error al generar sugerencias.");
-        setError(card, String(error.message || "Error inesperado de IA."));
-    }
-}
-
-async function autoGenerar(cards) {
-    for (const card of cards) {
-        await generarParaCard(card, true);
+        setError(card, String(error.message || "Error temporal al generar sugerencias. Intenta de nuevo."));
     }
 }
 
@@ -220,9 +221,4 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     });
-
-    if (cards.length > 0) {
-        autoGenerar(cards);
-    }
 });
-

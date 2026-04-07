@@ -58,11 +58,11 @@
                             </div>
 
                             <div class="sug-trip-actions">
-                                <button class="btn btn-primary btn-sm sug-refresh-btn" type="button">Regenerar sugerencias</button>
-                                <span class="sug-status">Preparando analisis IA...</span>
+                                <button class="btn btn-primary btn-sm sug-refresh-btn" type="button">Generar sugerencias</button>
+                                <span class="sug-status">Pulsa el boton para generar sugerencias con IA.</span>
                             </div>
 
-                            <div class="sug-loading">
+                            <div class="sug-loading d-none">
                                 <div class="spinner-border spinner-border-sm text-light" role="status"></div>
                                 <span>Generando recomendaciones completas...</span>
                             </div>
@@ -76,6 +76,5 @@
         </div>
     </section>
 
-    <script src="{{ asset('js/SugerenciasIA.js') }}?v=20260407a"></script>
+    <script src="{{ asset('js/SugerenciasIA.js') }}?v=20260407b"></script>
 {% endblock %}
-
