@@ -132,6 +132,169 @@
     padding: 0.9rem;
 }
 
+.sug-assistant-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.6fr);
+    gap: 0.8rem;
+    margin-top: 0.8rem;
+    animation: sugReveal 0.35s ease;
+}
+
+.sug-chat,
+.sug-notes {
+    background: linear-gradient(150deg, rgba(18, 37, 42, 0.92) 0%, rgba(31, 57, 63, 0.92) 100%);
+    border: 1px solid rgba(194, 182, 110, 0.28);
+    border-radius: 12px;
+    padding: 0.8rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 14px rgba(0, 0, 0, 0.2);
+}
+
+.sug-chat h4,
+.sug-notes h4 {
+    color: #d8ca7f;
+    font-size: 0.9rem;
+    margin-bottom: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.sug-panel-head {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 0.62rem;
+}
+
+.sug-panel-head p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.66);
+    font-size: 0.77rem;
+}
+
+.sug-panel-icon {
+    width: 29px;
+    height: 29px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.67rem;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(120deg, #0077B6 0%, #005a87 100%);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.sug-panel-icon.notes {
+    background: linear-gradient(120deg, #7d6f2a 0%, #5e531e 100%);
+}
+
+.sug-chat-window {
+    height: 235px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 0.2rem 0.3rem 0.2rem 0;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.sug-chat-bubble {
+    max-width: 86%;
+    border-radius: 12px;
+    padding: 0.6rem 0.72rem;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.87rem;
+    white-space: pre-line;
+    animation: sugBubbleIn 0.22s ease;
+}
+
+.sug-chat-bubble.bot {
+    align-self: flex-start;
+    background: #f5f7fa;
+    border: 1px solid #d7e0e8;
+    color: #2f4950;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.sug-chat-bubble.user {
+    align-self: flex-end;
+    background: linear-gradient(120deg, #0077B6 0%, #005a87 100%);
+    border: 1px solid rgba(0, 119, 182, 0.4);
+    color: #fff;
+}
+
+.sug-save-note {
+    display: block;
+    margin-top: 0.5rem;
+    border-radius: 999px;
+    border-color: rgba(47, 73, 80, 0.38);
+    color: #2f4950;
+    font-weight: 700;
+}
+
+.sug-chat-input {
+    display: flex;
+    gap: 0.45rem;
+    margin-top: 0.7rem;
+}
+
+.sug-chat-input input {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(255, 255, 255, 0.16);
+    color: #fff;
+    border-radius: 10px;
+    color: #2c4248;
+}
+
+.sug-chat-input input::placeholder {
+    color: rgba(44, 66, 72, 0.52);
+}
+
+.sug-chat-input .btn {
+    border-radius: 10px;
+    min-width: 72px;
+    font-weight: 700;
+}
+
+.sug-notes-content {
+    color: rgba(255, 255, 255, 0.87);
+    font-size: 0.86rem;
+    white-space: pre-line;
+    min-height: 235px;
+    max-height: 235px;
+    overflow-y: auto;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.58rem 0.62rem;
+}
+
+.sug-notes-content p {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 0.45rem;
+    padding-bottom: 0.45rem;
+}
+
+.sug-notes-content p:last-child {
+    border-bottom: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+@keyframes sugBubbleIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sugReveal {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 .sug-summary {
     margin-bottom: 0.85rem;
     color: rgba(255, 255, 255, 0.91);
@@ -208,5 +371,15 @@
         flex-direction: column;
         align-items: flex-start;
     }
-}
 
+    .sug-assistant-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .sug-notes-content,
+    .sug-chat-window {
+        min-height: 180px;
+        max-height: 180px;
+        height: 180px;
+    }
+}

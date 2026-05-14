@@ -183,7 +183,19 @@ function endChat() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
-        }).then(() => goToIA());
+        })
+        .then(async (res) => {
+            if (res.status === 401) {
+                window.location.href = "/login";
+                return;
+            }
+            if (!res.ok) {
+                addBotMessage("No he podido preparar el viaje. Intentalo de nuevo.");
+                return;
+            }
+            goToIA();
+        })
+        .catch(() => addBotMessage("No he podido conectar con el servidor."));
     };
 
     chat.appendChild(btn);

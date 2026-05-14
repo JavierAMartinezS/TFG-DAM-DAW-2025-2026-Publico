@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Usuario;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +19,10 @@ class ChatController extends AbstractController
     #[Route('/api/chat/ollama', name: 'chat_ollama', methods: ['POST'])]
     public function chat(Request $request, HttpClientInterface $httpClient): JsonResponse
     {
+        if (!$this->getUser() instanceof Usuario) {
+            return new JsonResponse(['error' => 'Debes iniciar sesion para generar viajes.'], 401);
+        }
+
         $data = json_decode($request->getContent(), true);
 
         $tipoViaje = $data['tipoViaje'] ?? '';
@@ -94,6 +99,10 @@ No inventes datos y escribe todos los textos solo en espanol.",
     #[Route('/api/chat/seleccion', name: 'chat_seleccion', methods: ['POST'])]
     public function seleccionarViaje(Request $request, HttpClientInterface $httpClient): JsonResponse
     {
+        if (!$this->getUser() instanceof Usuario) {
+            return new JsonResponse(['respuesta' => 'Debes iniciar sesion para generar itinerarios.'], 401);
+        }
+
         $data = json_decode($request->getContent(), true);
         $viaje = $data['viaje'] ?? '';
 
@@ -140,6 +149,10 @@ Responde solo en espanol.",
     #[Route('/api/chat/conversacion', name: 'chat_conversacion', methods: ['POST'])]
     public function conversacion(Request $request, HttpClientInterface $httpClient): JsonResponse
     {
+        if (!$this->getUser() instanceof Usuario) {
+            return new JsonResponse(['respuesta' => 'Debes iniciar sesion para usar la IA.'], 401);
+        }
+
         $data = json_decode($request->getContent(), true);
         $mensaje = $data['mensaje'] ?? '';
 

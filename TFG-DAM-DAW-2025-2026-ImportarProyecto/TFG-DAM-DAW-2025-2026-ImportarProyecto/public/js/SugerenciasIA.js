@@ -173,6 +173,109 @@ function renderSugerencias(card, sugerencias) {
     }
 
     contentNode.appendChild(grid);
+    showAssistantPanel(card);
+}
+
+function showAssistantPanel(card) {
+    const panel = card.querySelector(".sug-assistant-panel");
+    if (panel) {
+        panel.classList.remove("d-none");
+    }
+}
+
+function renderNotas(card, notas) {
+    const notesNode = card.querySelector(".sug-notes-content");
+    if (!notesNode) {
+        return;
+    }
+
+    const clean = String(notas || "").trim();
+    if (!clean) {
+        notesNode.textContent = "Sin notas guardadas todavia.";
+        return;
+    }
+
+    notesNode.innerHTML = "";
+    clean.split("\n").forEach((line) => {
+        if (!line.trim()) return;
+        const item = document.createElement("p");
+        item.textContent = line;
+        notesNode.appendChild(item);
+    });
+}
+
+function appendChatMessage(card, text, type = "bot", canSave = false) {
+    const windowNode = card.querySelector(".sug-chat-window");
+    if (!windowNode) {
+        return;
+    }
+
+    const bubble = document.createElement("div");
+    bubble.className = `sug-chat-bubble ${type}`;
+    bubble.textContent = text;
+
+    if (canSave) {
+        const saveButton = document.createElement("button");
+        saveButton.className = "btn btn-outline-light btn-sm sug-save-note";
+        saveButton.type = "button";
+        saveButton.textContent = "Guardar como nota";
+        saveButton.addEventListener("click", () => guardarNota(card, text));
+        bubble.appendChild(saveButton);
+    }
+
+    windowNode.appendChild(bubble);
+    windowNode.scrollTop = windowNode.scrollHeight;
+}
+
+async function guardarNota(card, nota) {
+    const viajeId = card.dataset.viajeId;
+    try {
+        const res = await fetch(`/api/sugerencias-ia/viaje/${viajeId}/nota`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nota }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+            throw new Error();
+        }
+        renderNotas(card, data.notas || "");
+        appendChatMessage(card, "Nota guardada en este viaje.", "bot", false);
+    } catch (_) {
+        appendChatMessage(card, "No se pudo guardar la nota ahora mismo.", "bot", false);
+    }
+}
+
+async function enviarChat(card) {
+    const input = card.querySelector(".sug-chat-input input");
+    const button = card.querySelector(".sug-chat-send");
+    const viajeId = card.dataset.viajeId;
+    const mensaje = input ? input.value.trim() : "";
+
+    if (!mensaje) {
+        return;
+    }
+
+    appendChatMessage(card, mensaje, "user", false);
+    input.value = "";
+    if (button) button.disabled = true;
+
+    try {
+        const res = await fetch(`/api/sugerencias-ia/viaje/${viajeId}/chat`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mensaje }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+            throw new Error();
+        }
+        appendChatMessage(card, data.respuesta || "No tengo respuesta para eso ahora mismo.", "bot", true);
+    } catch (_) {
+        appendChatMessage(card, "No he podido responder ahora mismo. Prueba otra vez en unos segundos.", "bot", false);
+    } finally {
+        if (button) button.disabled = false;
+    }
 }
 
 async function generarParaCard(card, isAutoLoad = false) {
@@ -204,6 +307,11 @@ async function generarParaCard(card, isAutoLoad = false) {
         }
 
         renderSugerencias(card, data.sugerencias || {});
+        renderNotas(card, data.notas || "");
+        const refreshBtn = card.querySelector(".sug-refresh-btn");
+        if (refreshBtn) {
+            refreshBtn.textContent = "Regenerar sugerencias";
+        }
         setLoading(card, false, "Sugerencias IA listas.");
     } catch (error) {
         setLoading(card, false, "Error al generar sugerencias.");
@@ -213,11 +321,33 @@ async function generarParaCard(card, isAutoLoad = false) {
 
 document.addEventListener("DOMContentLoaded", () => {
     const cards = Array.from(document.querySelectorAll(".sug-trip-card"));
+    const iniciales = window.sugerenciasIniciales || {};
+
     cards.forEach((card) => {
+        const initial = iniciales[card.dataset.viajeId];
+        if (initial && initial.sugerencias) {
+            renderSugerencias(card, initial.sugerencias);
+            renderNotas(card, initial.notas || "");
+        }
+
         const btn = card.querySelector(".sug-refresh-btn");
         if (btn) {
             btn.addEventListener("click", () => {
                 generarParaCard(card, false);
+            });
+        }
+
+        const chatButton = card.querySelector(".sug-chat-send");
+        const chatInput = card.querySelector(".sug-chat-input input");
+        if (chatButton) {
+            chatButton.addEventListener("click", () => enviarChat(card));
+        }
+        if (chatInput) {
+            chatInput.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    enviarChat(card);
+                }
             });
         }
     });

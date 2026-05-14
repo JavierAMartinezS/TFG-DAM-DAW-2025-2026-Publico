@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Sugerencia;
+use App\Entity\Usuario;
 use App\Entity\Viaje;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,18 +21,38 @@ final class SugerenciasIAController extends AbstractController
     #[Route('/sugerencias-ia', name: 'app_sugerencias_ia', methods: ['GET'])]
     public function index(EntityManagerInterface $em): Response
     {
-        $viajes = $em->getRepository(Viaje::class)->findBy([], ['id' => 'DESC']);
+        $usuario = $this->getUser();
+        if (!$usuario instanceof Usuario) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $viajes = $em->getRepository(Viaje::class)->findBy(['usuario' => $usuario], ['id' => 'DESC']);
+        $sugerenciasPorViaje = [];
+        foreach ($em->getRepository(Sugerencia::class)->findBy(['usuario' => $usuario]) as $sugerencia) {
+            if ($sugerencia->getViaje()) {
+                $sugerenciasPorViaje[$sugerencia->getViaje()->getId()] = [
+                    'sugerencias' => json_decode((string) $sugerencia->getContenidoJson(), true) ?: null,
+                    'notas' => $sugerencia->getNotasAdicionales() ?? '',
+                ];
+            }
+        }
 
         return $this->render('inicio/SugerenciasIA.html.twig', [
             'viajes' => $viajes,
+            'sugerenciasPorViaje' => $sugerenciasPorViaje,
         ]);
     }
 
     #[Route('/api/sugerencias-ia/viaje/{id}', name: 'api_sugerencias_ia_viaje', methods: ['POST'])]
     public function generarPorViaje(int $id, EntityManagerInterface $em, HttpClientInterface $httpClient): JsonResponse
     {
+        $usuario = $this->getUser();
+        if (!$usuario instanceof Usuario) {
+            return new JsonResponse(['ok' => false, 'error' => 'Debes iniciar sesion.'], 401);
+        }
+
         $viaje = $em->getRepository(Viaje::class)->find($id);
-        if (!$viaje) {
+        if (!$viaje || $viaje->getUsuario()?->getId() !== $usuario->getId()) {
             return new JsonResponse(['ok' => false, 'error' => 'Viaje no encontrado'], 404);
         }
 
@@ -140,10 +163,129 @@ Descripcion:
             ], 500);
         }
 
+        $sugerencia = $em->getRepository(Sugerencia::class)->findOneBy([
+            'usuario' => $usuario,
+            'viaje' => $viaje,
+        ]) ?? new Sugerencia();
+
+        $sugerencia->setUsuario($usuario);
+        $sugerencia->setViaje($viaje);
+        $sugerencia->setMensaje('Sugerencias IA para ' . $viaje->getNombre());
+        $sugerencia->setFecha(new \DateTime());
+        $sugerencia->setNivelPrioridad(1);
+        $sugerencia->setContenidoJson(json_encode($final, JSON_UNESCAPED_UNICODE));
+
+        $em->persist($sugerencia);
+        $em->flush();
+
         return new JsonResponse([
             'ok' => true,
             'viajeId' => $viaje->getId(),
             'sugerencias' => $final,
+            'notas' => $sugerencia->getNotasAdicionales() ?? '',
+        ]);
+    }
+
+    #[Route('/api/sugerencias-ia/viaje/{id}/chat', name: 'api_sugerencias_ia_chat', methods: ['POST'])]
+    public function chatViaje(int $id, Request $request, EntityManagerInterface $em, HttpClientInterface $httpClient): JsonResponse
+    {
+        $usuario = $this->getUser();
+        if (!$usuario instanceof Usuario) {
+            return new JsonResponse(['ok' => false, 'error' => 'Debes iniciar sesion.'], 401);
+        }
+
+        $viaje = $em->getRepository(Viaje::class)->find($id);
+        if (!$viaje || $viaje->getUsuario()?->getId() !== $usuario->getId()) {
+            return new JsonResponse(['ok' => false, 'error' => 'Viaje no encontrado'], 404);
+        }
+
+        $data = json_decode($request->getContent(), true) ?: [];
+        $mensaje = trim((string) ($data['mensaje'] ?? ''));
+        if ($mensaje === '') {
+            return new JsonResponse(['ok' => false, 'error' => 'Mensaje vacio'], 400);
+        }
+
+        $sugerencia = $em->getRepository(Sugerencia::class)->findOneBy([
+            'usuario' => $usuario,
+            'viaje' => $viaje,
+        ]);
+
+        $payload = [
+            'model' => self::OLLAMA_MODEL,
+            'stream' => false,
+            'messages' => [
+                [
+                    'role' => 'system',
+                    'content' => 'Eres un asistente de viaje. Responde en espanol, breve y practico. Usa el viaje, su descripcion y las sugerencias guardadas como contexto.',
+                ],
+                [
+                    'role' => 'user',
+                    'content' => "Viaje: {$viaje->getNombre()}
+Descripcion: " . substr((string) $viaje->getDescripcion(), 0, 2500) . "
+Sugerencias guardadas: " . substr((string) ($sugerencia?->getContenidoJson() ?? ''), 0, 2500) . "
+Notas adicionales: " . substr((string) ($sugerencia?->getNotasAdicionales() ?? ''), 0, 1200) . "
+
+Pregunta del usuario:
+{$mensaje}",
+                ],
+            ],
+        ];
+
+        $response = $httpClient->request('POST', self::OLLAMA_URL, [
+            'json' => $payload,
+            'timeout' => 120,
+        ]);
+
+        $decoded = json_decode($response->getContent(false), true);
+        $respuesta = trim((string) ($decoded['message']['content'] ?? ''));
+
+        if ($respuesta === '') {
+            return new JsonResponse(['ok' => false, 'error' => 'La IA no devolvio respuesta.'], 500);
+        }
+
+        return new JsonResponse(['ok' => true, 'respuesta' => $respuesta]);
+    }
+
+    #[Route('/api/sugerencias-ia/viaje/{id}/nota', name: 'api_sugerencias_ia_nota', methods: ['POST'])]
+    public function guardarNota(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $usuario = $this->getUser();
+        if (!$usuario instanceof Usuario) {
+            return new JsonResponse(['ok' => false, 'error' => 'Debes iniciar sesion.'], 401);
+        }
+
+        $viaje = $em->getRepository(Viaje::class)->find($id);
+        if (!$viaje || $viaje->getUsuario()?->getId() !== $usuario->getId()) {
+            return new JsonResponse(['ok' => false, 'error' => 'Viaje no encontrado'], 404);
+        }
+
+        $data = json_decode($request->getContent(), true) ?: [];
+        $nota = trim((string) ($data['nota'] ?? ''));
+        if ($nota === '') {
+            return new JsonResponse(['ok' => false, 'error' => 'Nota vacia'], 400);
+        }
+
+        $sugerencia = $em->getRepository(Sugerencia::class)->findOneBy([
+            'usuario' => $usuario,
+            'viaje' => $viaje,
+        ]) ?? new Sugerencia();
+
+        $actuales = trim((string) ($sugerencia->getNotasAdicionales() ?? ''));
+        $linea = '[' . (new \DateTime())->format('d/m/Y H:i') . '] ' . $nota;
+
+        $sugerencia->setUsuario($usuario);
+        $sugerencia->setViaje($viaje);
+        $sugerencia->setMensaje('Sugerencias IA para ' . $viaje->getNombre());
+        $sugerencia->setNivelPrioridad(1);
+        $sugerencia->setFecha(new \DateTime());
+        $sugerencia->setNotasAdicionales($actuales === '' ? $linea : $actuales . "\n" . $linea);
+
+        $em->persist($sugerencia);
+        $em->flush();
+
+        return new JsonResponse([
+            'ok' => true,
+            'notas' => $sugerencia->getNotasAdicionales(),
         ]);
     }
 

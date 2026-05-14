@@ -86,7 +86,9 @@ function transformarTarjetaSeleccionada() {
             body: JSON.stringify(data)
         });
 
-        if (res.ok) {
+        if (res.status === 401) {
+            window.location.href = "/login";
+        } else if (res.ok) {
             tarjetaSeleccionada.remove();
             tarjetaSeleccionada = null;
             await renderMisViajes();

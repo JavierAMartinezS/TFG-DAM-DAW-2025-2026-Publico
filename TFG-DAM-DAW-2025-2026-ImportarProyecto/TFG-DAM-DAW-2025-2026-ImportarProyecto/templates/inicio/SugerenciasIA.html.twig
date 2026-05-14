@@ -3,7 +3,7 @@
 {% block title %}Sugerencias IA | TripPlanner{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/sugerenciasIA.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/sugerenciasIA.css') }}?v=20260514b">
 {% endblock %}
 
 {% block body %}
@@ -30,6 +30,7 @@
             {% else %}
                 <div class="sug-grid mt-4">
                     {% for viaje in viajes %}
+                        {% set sugerenciaGuardada = sugerenciasPorViaje[viaje.id] ?? null %}
                         <article class="sug-trip-card shadow-sm" data-viaje-id="{{ viaje.id }}">
                             <div class="sug-trip-head">
                                 <div>
@@ -58,8 +59,8 @@
                             </div>
 
                             <div class="sug-trip-actions">
-                                <button class="btn btn-primary btn-sm sug-refresh-btn" type="button">Generar sugerencias</button>
-                                <span class="sug-status">Pulsa el boton para generar sugerencias con IA.</span>
+                                <button class="btn btn-primary btn-sm sug-refresh-btn" type="button">{{ sugerenciaGuardada ? 'Regenerar sugerencias' : 'Generar sugerencias' }}</button>
+                                <span class="sug-status">{{ sugerenciaGuardada ? 'Sugerencias guardadas cargadas.' : 'Pulsa el boton para generar sugerencias con IA.' }}</span>
                             </div>
 
                             <div class="sug-loading d-none">
@@ -69,6 +70,36 @@
 
                             <div class="sug-error d-none"></div>
                             <div class="sug-content d-none"></div>
+                            <div class="sug-assistant-panel d-none">
+                                <div class="sug-chat">
+                                    <div class="sug-panel-head">
+                                        <span class="sug-panel-icon">IA</span>
+                                        <div>
+                                            <h4>Chat de este viaje</h4>
+                                            <p>Respuestas en contexto del viaje</p>
+                                        </div>
+                                    </div>
+                                    <div class="sug-chat-window">
+                                        <div class="sug-chat-bubble bot">
+                                            Hola, puedo ayudarte con actividades posibles en los destinos del viaje, medios de transporte para el recorrido o dudas sobre las sugerencias generadas.
+                                        </div>
+                                    </div>
+                                    <div class="sug-chat-input">
+                                        <input type="text" class="form-control form-control-sm" placeholder="Pregunta sobre este viaje...">
+                                        <button class="btn btn-primary btn-sm sug-chat-send" type="button">Enviar</button>
+                                    </div>
+                                </div>
+                                <aside class="sug-notes">
+                                    <div class="sug-panel-head">
+                                        <span class="sug-panel-icon notes">NT</span>
+                                        <div>
+                                            <h4>Notas adicionales</h4>
+                                            <p>Guardado persistente por viaje</p>
+                                        </div>
+                                    </div>
+                                    <div class="sug-notes-content">Sin notas guardadas todavia.</div>
+                                </aside>
+                            </div>
                         </article>
                     {% endfor %}
                 </div>
@@ -76,5 +107,8 @@
         </div>
     </section>
 
-    <script src="{{ asset('js/SugerenciasIA.js') }}?v=20260407b"></script>
+    <script>
+        window.sugerenciasIniciales = {{ sugerenciasPorViaje|json_encode|raw }};
+    </script>
+    <script src="{{ asset('js/SugerenciasIA.js') }}?v=20260514a"></script>
 {% endblock %}
