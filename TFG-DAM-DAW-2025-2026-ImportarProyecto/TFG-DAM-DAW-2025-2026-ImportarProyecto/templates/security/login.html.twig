@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login | TripPlanner{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+{% endblock %}
+
+{% block body %}
+    <section class="login-page py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-xl-5">
+                    <div class="card login-card border-0 shadow-lg">
+                        <div class="card-body p-4 p-lg-5">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h1 class="h3 mb-0 fw-bold text-white">Acceso</h1>
+                                <span class="badge rounded-pill text-bg-warning text-dark px-3 py-2">TripPlanner</span>
+                            </div>
+                            <p class="text-white-50 mb-4">Inicia sesion para acceder a tus funciones personalizadas.</p>
+
+                            {% if error %}
+                                <div class="alert alert-danger">
+                                    Email o contrasena incorrectos.
+                                </div>
+                            {% endif %}
+
+                            {% for message in app.flashes('success') %}
+                                <div class="alert alert-success">{{ message }}</div>
+                            {% endfor %}
+
+                            <form method="post" class="vstack gap-3">
+                                <div>
+                                    <label for="email" class="form-label text-white fw-semibold">Email</label>
+                                    <input type="email" value="{{ last_username }}" name="email" id="email" class="form-control form-control-lg" autocomplete="email" required autofocus>
+                                </div>
+                                <div>
+                                    <label for="password" class="form-label text-white fw-semibold">Contrasena</label>
+                                    <input type="password" name="password" id="password" class="form-control form-control-lg" autocomplete="current-password" required>
+                                </div>
+
+                                <button class="btn btn-lg btn-login w-100" type="submit">
+                                    Entrar
+                                </button>
+
+                                <div class="login-hint mt-2">
+                                    <div>¿Todavia no tienes cuenta? <a href="{{ path('app_registro') }}">Crear cuenta</a></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <a href="{{ path('app_inicio') }}" class="btn btn-outline-light px-4">Volver al inicio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

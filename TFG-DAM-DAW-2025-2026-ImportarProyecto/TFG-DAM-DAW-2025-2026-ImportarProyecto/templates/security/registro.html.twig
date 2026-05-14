@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Crear cuenta | TripPlanner{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+{% endblock %}
+
+{% block body %}
+    <section class="login-page py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-7 col-xl-5">
+                    <div class="card login-card border-0 shadow-lg">
+                        <div class="card-body p-4 p-lg-5">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h1 class="h3 mb-0 fw-bold text-white">Crear cuenta</h1>
+                                <span class="badge rounded-pill text-bg-warning text-dark px-3 py-2">Nuevo usuario</span>
+                            </div>
+                            <p class="text-white-50 mb-4">Guarda tus viajes y accede a tu espacio personal.</p>
+
+                            {% if error %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endif %}
+
+                            <form method="post" class="vstack gap-3">
+                                <div>
+                                    <label for="nombre" class="form-label text-white fw-semibold">Nombre</label>
+                                    <input type="text" value="{{ nombre }}" name="nombre" id="nombre" class="form-control form-control-lg" autocomplete="name" required>
+                                </div>
+                                <div>
+                                    <label for="email" class="form-label text-white fw-semibold">Email</label>
+                                    <input type="email" value="{{ email }}" name="email" id="email" class="form-control form-control-lg" autocomplete="email" required>
+                                </div>
+                                <div>
+                                    <label for="password" class="form-label text-white fw-semibold">Contrasena</label>
+                                    <input type="password" name="password" id="password" class="form-control form-control-lg" autocomplete="new-password" required>
+                                </div>
+                                <div>
+                                    <label for="password_confirm" class="form-label text-white fw-semibold">Repetir contrasena</label>
+                                    <input type="password" name="password_confirm" id="password_confirm" class="form-control form-control-lg" autocomplete="new-password" required>
+                                </div>
+
+                                <button class="btn btn-lg btn-login w-100" type="submit">
+                                    Crear cuenta
+                                </button>
+
+                                <div class="login-hint mt-2">
+                                    <div>¿Ya tienes cuenta? <a href="{{ path('app_login') }}">Iniciar sesion</a></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <a href="{{ path('app_inicio') }}" class="btn btn-outline-light px-4">Volver al inicio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+

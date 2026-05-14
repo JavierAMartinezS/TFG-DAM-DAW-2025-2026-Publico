@@ -5,11 +5,14 @@ namespace App\Entity;
 use App\Repository\UsuarioRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Viaje;
 use App\Entity\Sugerencia;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UsuarioRepository::class)]
-class Usuario
+class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -19,7 +22,7 @@ class Usuario
     #[ORM\Column(length: 255)]
     private ?string $nombre = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -33,6 +36,13 @@ class Usuario
 
     #[ORM\OneToMany(mappedBy: 'usuario', targetEntity: Sugerencia::class)]
     private Collection $sugerencias;
+
+    public function __construct()
+    {
+        $this->fechaRegistro = new \DateTime();
+        $this->viajes = new ArrayCollection();
+        $this->sugerencias = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -68,6 +78,20 @@ class Usuario
         $this->email = $email;
 
         return $this;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    public function getRoles(): array
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function eraseCredentials(): void
+    {
     }
 
     public function getPassword(): ?string

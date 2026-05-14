@@ -1,0 +1,58 @@
+.login-page {
+    background:
+        radial-gradient(circle at 12% 10%, rgba(194, 182, 110, 0.18), transparent 35%),
+        radial-gradient(circle at 85% 5%, rgba(0, 119, 182, 0.18), transparent 35%),
+        linear-gradient(135deg, #304142 0%, #2b4b53 55%, #486567 100%);
+    min-height: 100%;
+}
+
+.login-card {
+    border-radius: 18px;
+    border: 1px solid rgba(194, 182, 110, 0.55);
+    background: linear-gradient(150deg, rgba(20, 34, 40, 0.96) 0%, rgba(35, 65, 73, 0.92) 100%);
+}
+
+.login-card .form-control {
+    border-radius: 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+.login-card .form-control:focus {
+    border-color: rgba(0, 119, 182, 0.95);
+    box-shadow: 0 0 0 0.18rem rgba(0, 119, 182, 0.25);
+}
+
+.btn-login {
+    background: linear-gradient(120deg, #0077B6 0%, #005a87 100%);
+    border: 0;
+    border-radius: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.btn-login:hover {
+    filter: brightness(1.06);
+    color: #fff;
+}
+
+.login-hint {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.login-hint a {
+    color: #d8ca7f;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.login-hint a:hover {
+    color: #ffffff;
+}
+
+.login-hint code {
+    color: #d8ca7f;
+}

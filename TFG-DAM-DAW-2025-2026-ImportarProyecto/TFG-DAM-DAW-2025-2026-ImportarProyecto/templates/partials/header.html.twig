@@ -31,6 +31,25 @@
                     <a class="nav-link" href="{{ path('app_contacto') }}">Contacto</a>
                 </li>
 
+                <li class="nav-item dropdown login-nav-item">
+                    <a class="nav-link login-icon-link dropdown-toggle" href="#" id="loginDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Cuenta">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                            <path fill-rule="evenodd" d="M14 14s-1-4-6-4-6 4-6 4 1 1 6 1 6-1 6-1"/>
+                        </svg>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end login-dropdown" aria-labelledby="loginDropdown">
+                        {% if app.user %}
+                            <li><span class="dropdown-item-text">Hola, {{ app.user.userIdentifier }}</span></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ path('app_logout') }}">Cerrar sesion</a></li>
+                        {% else %}
+                            <li><a class="dropdown-item" href="{{ path('app_login') }}">Iniciar sesion</a></li>
+                            <li><a class="dropdown-item" href="{{ path('app_registro') }}">Crear cuenta</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+
             </ul>
         </div>
     </div>
