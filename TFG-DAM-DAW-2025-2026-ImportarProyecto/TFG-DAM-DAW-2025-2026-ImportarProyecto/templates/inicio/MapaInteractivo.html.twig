@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mapa Interactivo | TripPlanner{% endblock %}
+
+{% block body %}
+    <section class="mapa-interactivo-page py-5">
+        <div class="container">
+            <div class="mapa-hero-card shadow-lg mb-4">
+                <div class="mapa-hero-content">
+                    <h1 class="fw-bold text-white mb-2">Mapa Interactivo</h1>
+                    <p class="mb-0">Elige uno de tus viajes guardados para abrir su mapa, ordenar la ruta por cercania y anadir recomendaciones cercanas con IA.</p>
+                </div>
+                <div class="mapa-hero-features">
+                    <div>
+                        <strong>Ruta inteligente</strong>
+                        <span>Conecta dias y calcula tiempos.</span>
+                    </div>
+                    <div>
+                        <strong>Guardados visuales</strong>
+                        <span>Favoritos y lugares visitados.</span>
+                    </div>
+                    <div>
+                        <strong>Explorar cerca</strong>
+                        <span>Planes, miradores y restaurantes.</span>
+                    </div>
+                </div>
+            </div>
+
+            {% if viajes is empty %}
+                <div class="mapa-empty-state">
+                    <h2 class="h4 fw-bold mb-2">Todavia no tienes viajes guardados</h2>
+                    <p class="mb-4">Crea un viaje con el asistente para activar el mapa interactivo.</p>
+                    <a class="btn btn-warning px-4" href="{{ path('app_viaje') }}">Crear viaje</a>
+                </div>
+            {% else %}
+                <div class="mapa-trip-grid">
+                    {% for viaje in viajes %}
+                        <article class="mapa-trip-card">
+                            <div class="mapa-trip-card-top">
+                                <div>
+                                    <span class="mapa-trip-type">{{ viaje.tipoViaje ? viaje.tipoViaje.nombre : 'Tipo no definido' }}</span>
+                                    <h2 class="h5 fw-bold mb-2">{{ viaje.nombre }}</h2>
+                                </div>
+                                <span class="mapa-trip-ref">#{{ viaje.id }}</span>
+                            </div>
+
+                            <p class="mapa-trip-description">
+                                {% if viaje.descripcion %}
+                                    {{ viaje.descripcion|slice(0, 180) ~ (viaje.descripcion|length > 180 ? '...' : '') }}
+                                {% else %}
+                                    Viaje guardado listo para visualizar en mapa.
+                                {% endif %}
+                            </p>
+
+                            <div class="mapa-trip-meta">
+                                <span>
+                                    <strong>Fechas</strong>
+                                    {{ viaje.fechaInicio ? viaje.fechaInicio|date('d/m/Y') : 'Flexible' }} - {{ viaje.fechaFin ? viaje.fechaFin|date('d/m/Y') : 'Flexible' }}
+                                </span>
+                                <span>
+                                    <strong>Presupuesto</strong>
+                                    {% if viaje.presupuestoEstimado is not null %}
+                                        {{ viaje.presupuestoEstimado|number_format(0, ',', '.') }} EUR
+                                    {% else %}
+                                        No definido
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                            <div class="mapa-trip-tools">
+                                <span>Ruta inteligente</span>
+                                <span>Favoritos</span>
+                                <span>Visitado</span>
+                                <span>Explorar cerca</span>
+                            </div>
+
+                            <div class="mapa-trip-actions">
+                                <a class="btn btn-warning btn-sm px-3" href="{{ path('app_viaje_detalle', {id: viaje.id}) }}">Detalles del viaje</a>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

@@ -210,13 +210,17 @@ Descripcion:
             'viaje' => $viaje,
         ]);
 
+        $session = $request->getSession();
+        $historyKey = 'sugerencias_ia_chat_' . $usuario->getId() . '_' . $viaje->getId();
+        $history = $this->normalizeChatHistory($session->get($historyKey, []));
+
         $payload = [
             'model' => self::OLLAMA_MODEL,
             'stream' => false,
-            'messages' => [
+            'messages' => array_merge([
                 [
                     'role' => 'system',
-                    'content' => 'Eres un asistente de viaje. Responde en espanol, breve y practico. Usa el viaje, su descripcion y las sugerencias guardadas como contexto.',
+                    'content' => 'Eres un asistente de viaje. Responde en espanol, breve y practico. Usa el viaje, su descripcion, las sugerencias guardadas y los ultimos mensajes de la conversacion como contexto.',
                 ],
                 [
                     'role' => 'user',
@@ -225,10 +229,14 @@ Descripcion: " . substr((string) $viaje->getDescripcion(), 0, 2500) . "
 Sugerencias guardadas: " . substr((string) ($sugerencia?->getContenidoJson() ?? ''), 0, 2500) . "
 Notas adicionales: " . substr((string) ($sugerencia?->getNotasAdicionales() ?? ''), 0, 1200) . "
 
-Pregunta del usuario:
-{$mensaje}",
+Usa tambien los ultimos mensajes reales que recibiras despues de este contexto. Si el usuario hace referencia a algo dicho antes, conectalo con ese historial.",
                 ],
-            ],
+            ], $history, [
+                [
+                    'role' => 'user',
+                    'content' => $mensaje,
+                ],
+            ]),
         ];
 
         $response = $httpClient->request('POST', self::OLLAMA_URL, [
@@ -242,6 +250,10 @@ Pregunta del usuario:
         if ($respuesta === '') {
             return new JsonResponse(['ok' => false, 'error' => 'La IA no devolvio respuesta.'], 500);
         }
+
+        $history[] = ['role' => 'user', 'content' => $mensaje];
+        $history[] = ['role' => 'assistant', 'content' => $respuesta];
+        $session->set($historyKey, array_slice($history, -5));
 
         return new JsonResponse(['ok' => true, 'respuesta' => $respuesta]);
     }
@@ -308,5 +320,36 @@ Pregunta del usuario:
         }
 
         return 'Otono';
+    }
+
+    /**
+     * @param mixed $history
+     * @return array<int, array{role: string, content: string}>
+     */
+    private function normalizeChatHistory(mixed $history): array
+    {
+        if (!is_array($history)) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($history as $message) {
+            if (!is_array($message)) {
+                continue;
+            }
+
+            $role = (string) ($message['role'] ?? '');
+            $content = trim((string) ($message['content'] ?? ''));
+            if (!in_array($role, ['user', 'assistant'], true) || $content === '') {
+                continue;
+            }
+
+            $normalized[] = [
+                'role' => $role,
+                'content' => substr($content, 0, 1600),
+            ];
+        }
+
+        return array_slice($normalized, -5);
     }
 }

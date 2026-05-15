@@ -30,6 +30,11 @@
                             <div class="viaje-hero-map-box">
                                 <div id="mapaViajeDetalle"></div>
                             </div>
+                            <div class="viaje-map-actions mt-3">
+                                <button id="btnRutaInteligente" class="btn btn-warning btn-sm" type="button">Ruta inteligente</button>
+                                <button id="btnExplorarCerca" class="btn btn-outline-light btn-sm" type="button">Descubrir sitios cercanos</button>
+                                <button id="btnAjustarMapa" class="btn btn-outline-light btn-sm" type="button">Ajustar mapa</button>
+                            </div>
                             <p id="viajeMapaEstado" class="viaje-map-status mb-0 mt-2">
                                 Buscando ciudades mencionadas en la descripcion...
                             </p>
@@ -66,6 +71,37 @@
                                         No definido
                                     {% endif %}
                                 </strong>
+                            </div>
+
+                            <div class="viaje-map-side-panel mt-4">
+                                <h3 class="h6 fw-bold mb-3">Lugares del mapa</h3>
+                                <div id="viajeMapPlaces" class="viaje-map-place-list">
+                                    <p class="text-muted mb-0">Cargando lugares...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mt-1">
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm h-100 viaje-map-panel">
+                        <div class="card-body p-4">
+                            <h2 class="h5 fw-bold mb-3">Ruta inteligente</h2>
+                            <div id="viajeRoutePanel" class="viaje-route-panel">
+                                <p class="text-muted mb-0">Pulsa Ruta inteligente para ordenar los puntos por cercania y ver tiempos estimados.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm h-100 viaje-map-panel">
+                        <div class="card-body p-4">
+                            <h2 class="h5 fw-bold mb-3">Explorar cerca</h2>
+                            <div id="viajeExplorePanel" class="viaje-explore-panel">
+                                <p class="text-muted mb-0">La IA puede sugerir restaurantes, miradores, monumentos, naturaleza y planes ocultos cerca de tu ruta.</p>
                             </div>
                         </div>
                     </div>
@@ -130,9 +166,13 @@
 
     <script>
         window.viajeDetalle = {{ {
+            id: viaje.id,
             nombre: viaje.nombre,
-            descripcion: viaje.descripcion ?: ''
+            descripcion: viaje.descripcion ?: '',
+            tipoViaje: viaje.tipoViaje ? viaje.tipoViaje.nombre : '',
+            fechaInicio: viaje.fechaInicio ? viaje.fechaInicio|date('Y-m-d') : null,
+            fechaFin: viaje.fechaFin ? viaje.fechaFin|date('Y-m-d') : null
         }|json_encode|raw }};
     </script>
-    <script src="{{ asset('js/ViajeDetalle.js') }}?v=20260407d"></script>
+    <script src="{{ asset('js/ViajeDetalle.js') }}?v=20260515d"></script>
 {% endblock %}
