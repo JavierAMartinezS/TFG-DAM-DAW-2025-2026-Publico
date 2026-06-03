@@ -2,9 +2,22 @@ const chatWindow = document.querySelector(".ia-chat-window");
 const sidebar = document.querySelector(".ia-map-sidebar");
 const input = document.querySelector(".ia-chat-input input");
 const button = document.querySelector(".ia-chat-input button");
+const mapPanel = document.querySelector(".ia-map-panel");
+const mapCanvas = document.querySelector(".ia-map-canvas");
+const mapToggle = document.querySelector(".ia-map-toggle");
 let tarjetaSeleccionada = null;
 let viajesMostrados = [];
 let spinnerChat = null;
+
+function setMapPanelOpen(isOpen) {
+    if (!mapPanel || !mapToggle) return;
+    mapPanel.classList.toggle("is-open", isOpen);
+    if (mapCanvas) {
+        mapCanvas.classList.toggle("is-open", isOpen);
+    }
+    mapToggle.setAttribute("aria-expanded", String(isOpen));
+    mapToggle.setAttribute("aria-label", isOpen ? "Cerrar mapa" : "Abrir mapa");
+}
 
 function addBotMessage(msg) {
     const div = document.createElement("div");
@@ -270,6 +283,24 @@ window.addEventListener("DOMContentLoaded", () => {
     addBotMessage("He analizado tus datos para el viaje. Generando viajes...");
     iniciarGeneracionViajes();
     renderMisViajes();
+});
+
+if (mapToggle) {
+    mapToggle.addEventListener("click", () => {
+        setMapPanelOpen(!mapPanel.classList.contains("is-open"));
+    });
+}
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        setMapPanelOpen(false);
+    }
+});
+
+window.addEventListener("resize", () => {
+    if (window.innerWidth > 1300) {
+        setMapPanelOpen(false);
+    }
 });
 
 button.addEventListener("click", () => {
