@@ -91,6 +91,85 @@ h4 {
     justify-content: center;
     font-weight: 600;
 }
+
+.ia-trip-card-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.ia-trip-card-actions .btn {
+    flex: 1 1 135px;
+    max-width: 90%;
+}
+
+.ia-selected-actions {
+    display: grid;
+    gap: 0.6rem;
+}
+
+.ia-selected-actions > .ia-preview-map-btn {
+    width: 100%;
+    padding: 0.75rem;
+    font-weight: 700;
+}
+
+.ia-selected-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+}
+
+.ia-selected-actions-grid .btn {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.75rem 0.5rem;
+    font-weight: 700;
+}
+
+.ia-map-preview-shell {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #dfe7ec;
+    color: #263238;
+}
+
+.ia-map-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.7rem 0.85rem;
+    background: #304142;
+    color: #ffffff;
+    font-size: 0.9rem;
+}
+
+.ia-map-preview-header span {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.ia-map-preview-map {
+    flex: 1;
+    min-height: 300px;
+    width: 100%;
+}
+
+.ia-map-preview-status {
+    margin: 0;
+    padding: 0.62rem 0.85rem;
+    background: #ffffff;
+    border-top: 1px solid #cfd8dc;
+    color: #455a64;
+    font-size: 0.86rem;
+    font-weight: 500;
+}
 .ia-chat-input > button {
     padding: 12px;
     background: #0077B6;
